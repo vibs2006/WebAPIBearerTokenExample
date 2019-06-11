@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Web.Http;
 
@@ -11,6 +13,18 @@ namespace WebAPIBearerTokenExample.Controllers
     [RoutePrefix("v1")]
     public class DefaultController : ApiController
     {
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Default/Index")]
+        public HttpResponseMessage Index()
+        {
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent("<html><body>Web API 2 Hosting Successful using OWIN Framework</body></html>");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+        }
+
 
         [AllowAnonymous]
         [HttpGet]
