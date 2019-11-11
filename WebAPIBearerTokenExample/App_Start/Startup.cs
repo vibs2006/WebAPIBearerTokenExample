@@ -7,6 +7,7 @@ using WebAPIBearerTokenExample;
 using System.IO;
 using System.Text;
 using System.Diagnostics;
+using System.Configuration;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -32,13 +33,12 @@ namespace WebAPIBearerTokenExample
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
                     OnGrantResourceOwnerCredentials = async (context) =>
                     {
-                        if (context.UserName == "test.test@mail.com" && context.Password == "test123")
+                        if (context.UserName == ConfigurationManager.AppSettings.Get("UserName") && context.Password == ConfigurationManager.AppSettings.Get("Password"))
                         {
 
-                           // var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                            // var identity = new ClaimsIdentity(context.Options.AuthenticationType);
                             //identity.AddClaim(new Claim("sub", context.UserName));
                             //identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
-
                             //context.Validated(identity);
 
                             ClaimsIdentity oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
@@ -57,7 +57,6 @@ namespace WebAPIBearerTokenExample
                         {
                             context.SetError("Invalid Username / Password", "Invalid Username / Password");
                             context.Rejected();
-                            
                         }
 
 
@@ -66,19 +65,19 @@ namespace WebAPIBearerTokenExample
                         //string body = new StreamReader(s).ReadToEnd();
                         //byte[] data = Convert.FromBase64String(body);
                         //string decodedString = Encoding.UTF8.GetString(data);
-//                        using(var bufferStream = new MemoryStream())
-//                        {
-//                            var orgBodyStream = context.Response.Body;
-//                            context.Response.Body = bufferStream;
+                        //                        using(var bufferStream = new MemoryStream())
+                        //                        {
+                        //                            var orgBodyStream = context.Response.Body;
+                        //                            context.Response.Body = bufferStream;
 
-//                            bufferStream.Seek(0, SeekOrigin.Begin);
-//#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-//                            bufferStream.CopyToAsync(orgBodyStream);
-//#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-//                            context.Response.Body = orgBodyStream;
-//                            string s1 = new StreamReader(orgBodyStream).ReadToEnd();
-//                            Trace.WriteLine(s1);
-//                        }
+                        //                            bufferStream.Seek(0, SeekOrigin.Begin);
+                        //#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        //                            bufferStream.CopyToAsync(orgBodyStream);
+                        //#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        //                            context.Response.Body = orgBodyStream;
+                        //                            string s1 = new StreamReader(orgBodyStream).ReadToEnd();
+                        //                            Trace.WriteLine(s1);
+                        //                        }
                     }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                 },

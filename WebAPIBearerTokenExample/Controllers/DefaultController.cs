@@ -25,7 +25,6 @@ namespace WebAPIBearerTokenExample.Controllers
             return response;
         }
 
-
         [AllowAnonymous]
         [HttpGet]
         [Route("Default/Ping")]
