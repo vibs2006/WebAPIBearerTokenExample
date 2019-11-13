@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using WebAPIBearerTokenExample.Common.ControllerMethods;
 
 namespace WebAPIBearerTokenExample
 {
@@ -14,10 +15,18 @@ namespace WebAPIBearerTokenExample
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            config.MessageHandlers.Add(new CustomRequestResponseHandler());
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi2",
+                routeTemplate: "{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional, controller = "Home", action = "Index" }
             );
         }
     }
