@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="//code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    <fieldset>
+        <legend>Testing Basic Authentication</legend>
+        <table style="width:600px;margin-right:auto;margin-left:auto" border="1" cellpadding="1" cellspacing="1">
+            <tbody>
+                <tr>
+                    <td>Username</td>
+                    <td><input type="text" id="textUsername" style="width:100%" value="vibs2006" />  </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="text" id="textPassword" style="width:100%" value="test123" />  </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" id="btnSubmit" value="Submit" />  </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:100%" id="divOutput"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+   
+    <script>
+        $(document).ready(function () {
+
+            $("#btnSubmit").on("click", function () {
+                var userName = $("#textUsername").val();
+                var password = $("#textPassword").val();
+                if (userName != "" &&  password != "" ) {
+                    $.ajax({
+                        url: "/v1/Default/TestBasic",
+                        type: 'GET',
+                        dataType: 'json',
+                        headers: {
+                            'header1': 'value1',
+                            'header2': 'value2',
+                            'Authorization': 'Basic ' + btoa(userName + ":" + password)
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (result,response,xhr) {
+                            // CallBack(result);
+                            $("#divOutput").html(JSON.stringify(result,null,2));
+                            console.log(result);
+                            console.log(response);
+                            console.log(xhr);
+                        },
+                        error: function (error,response,xhr) {
+                            $("#divOutput").html(JSON.stringify(error,null,2));
+                            console.log(error);
+                            console.log(response);
+                            console.log(xhr);
+                        }
+                    });
+                }
+                else {
+                    alert("username and password cannot be left blank");
+                }
+                
+            });
+
+        });
+    </script>
+</body>
+</html>

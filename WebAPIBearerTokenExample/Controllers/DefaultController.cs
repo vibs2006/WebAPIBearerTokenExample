@@ -6,7 +6,9 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Threading;
 using System.Web.Http;
+using WebAPIBearerTokenExample.App_Start;
 
 namespace WebAPIBearerTokenExample.Controllers
 {
@@ -20,7 +22,7 @@ namespace WebAPIBearerTokenExample.Controllers
         public HttpResponseMessage Index()
         {
             var response = new HttpResponseMessage();
-            response.Content = new StringContent("<html><body>Web API 2 Hosting Successful using OWIN Framework</body></html>");
+            response.Content = new StringContent("<html><body>Web API 2 Hosting Successful using OWIN Framework. <a href='/TestClient.html'>Test Client</a></body></html>");
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
             return response;
         }
@@ -57,6 +59,16 @@ namespace WebAPIBearerTokenExample.Controllers
 
             var claims = claimsIdentity.Claims.Select(x => new { type = x.Type, value = x.Value });
 
+            return Ok(claims);
+        }
+
+        [BasicAuthentication]
+        [HttpGet]
+        [Route("Default/TestBasic")]
+        public IHttpActionResult TestBasic()
+        {
+            ClaimsPrincipal claimsIdentity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            var claims = claimsIdentity.Claims.Select(x => new { type = x.Type, value = x.Value });
             return Ok(claims);
         }
 
