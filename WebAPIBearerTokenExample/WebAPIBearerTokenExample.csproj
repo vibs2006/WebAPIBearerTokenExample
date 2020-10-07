@@ -110,6 +110,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Readme.jpg" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="TestClient.html" />
