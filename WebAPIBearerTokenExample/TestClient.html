@@ -30,14 +30,59 @@
             </tbody>
         </table>
     </fieldset>
-   
+
+    <fieldset>
+        <legend>Get Token</legend>
+        <table style="width:600px;margin-right:auto;margin-left:auto" border="1" cellpadding="1" cellspacing="1">
+            <tbody>
+                <tr>
+                    <td>Username</td>
+                    <td><input type="text" id="textUsernameToken" style="width:100%" value="vibs2006" />  </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="text" id="textPasswordToken" style="width:100%" value="test123" />  </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" id="btnGetToken" value="Submit" />  </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:100%" id="divOutputToken"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Testing Token Authentication</legend>
+        <table style="width:600px;margin-right:auto;margin-left:auto" border="1" cellpadding="1" cellspacing="1">
+            <tbody>
+                <tr>
+                    <td>Token</td>
+                    <td><input type="text" id="textTokenToBeSend" style="width:100%" value="" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" id="btnSubmitTokenAuthenticatedRequest" value="Submit" />  </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:100%" id="divOutputToken"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
     <script>
         $(document).ready(function () {
-
-            $("#btnSubmit").on("click", function () {
+      $("#btnSubmit").on("click", function () {
                 var userName = $("#textUsername").val();
                 var password = $("#textPassword").val();
-                if (userName != "" &&  password != "" ) {
+                if (userName != "" && password != "") {
                     $.ajax({
                         url: "/v1/Default/TestBasic",
                         type: 'GET',
@@ -48,15 +93,15 @@
                             'Authorization': 'Basic ' + btoa(userName + ":" + password)
                         },
                         contentType: 'application/json; charset=utf-8',
-                        success: function (result,response,xhr) {
+                        success: function (result, response, xhr) {
                             // CallBack(result);
-                            $("#divOutput").html(JSON.stringify(result,null,2));
+                            $("#divOutput").html(JSON.stringify(result, null, 2));
                             console.log(result);
                             console.log(response);
                             console.log(xhr);
                         },
-                        error: function (error,response,xhr) {
-                            $("#divOutput").html(JSON.stringify(error,null,2));
+                        error: function (error, response, xhr) {
+                            $("#divOutput").html(JSON.stringify(error, null, 2));
                             console.log(error);
                             console.log(response);
                             console.log(xhr);
@@ -66,8 +111,41 @@
                 else {
                     alert("username and password cannot be left blank");
                 }
-                
+
             });
+    //http://localhost:33328/Default/TestAuthorization
+    $(document).on("click", "#btnGetToken", function () {
+        $("#textTokenToBeSend").val("");
+        var userName = $("#textUsernameToken").val();
+        var passWord = $("#textPasswordToken").val();
+        $.post("http://localhost:33328/token", {
+            "username": userName,
+            "password": passWord,
+            "grant_type": "password"
+        }, function (data) {
+                console.log(data);
+                $("#textTokenToBeSend").val(data.access_token);
+        });
+
+    });
+
+    $(document).on("click", "#btnSubmitTokenAuthenticatedRequest", function (data) {
+        $.ajax(
+            {
+            url: 'http://localhost:33328/v1/Default/TestAuthorization',
+            headers: {
+                'Authorization': 'Bearer ' + $("#textTokenToBeSend").val(),              
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+            dataType: 'json',
+            //data: YourData,
+            success: function (data) {
+                console.log("Success");
+                console.log(data);
+            }
+        });
+    });
 
         });
     </script>
