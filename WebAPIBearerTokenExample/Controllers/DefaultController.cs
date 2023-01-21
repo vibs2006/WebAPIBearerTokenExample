@@ -15,7 +15,6 @@ namespace WebAPIBearerTokenExample.Controllers
     [RoutePrefix("v1")]
     public class DefaultController : ApiController
     {
-
         [HttpGet]
         [AllowAnonymous]
         [Route("Default/Index")]

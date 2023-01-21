@@ -105,7 +105,7 @@ namespace WebAPIBearerTokenExample.App_Start
                 var obj = new
                 {
                     Status = "Failure",
-                    Description = "Invalid HTTP Request resulting in server error"
+                    Description = "Invalid HTTP Request resulting in server error; " + Ex.Message
                 };
                 response.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(obj));
                 response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
